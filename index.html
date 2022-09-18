@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="main.css" />
     <title>Document</title>
   </head>
   <body>
@@ -13,36 +13,37 @@
       <div class="container">
         <div class="diff">
           <p>Select difficulty:</p>
-          <label for="easy"
-            ><input
-              type="checkbox"
+          <label for="easy">
+            <input
+              type="radio"
               name="difficulty"
               value="easy"
               id="easy"
               class="mode"
             />
-            Easy</label
-          >
-          <label for="normal"
-            ><input
-              type="checkbox"
+            Easy
+          </label>
+          <label for="normal">
+            <input
+              type="radio"
               name="difficulty"
               value="normal"
               id="normal"
               class="mode"
             />
-            Normal</label
-          >
-          <label for="hard"
-            ><input
-              type="checkbox"
+            Normal
+          </label>
+          <label for="hard">
+            <input
+              type="radio"
               name="difficulty"
               value="hard"
               id="hard"
               class="mode"
+              checked
             />
-            Hard</label
-          >
+            Hard
+          </label>
         </div>
         <div class="message">
           You Are Playing On
@@ -63,6 +64,6 @@
       </div>
     </div>
 
-    <script src="/main.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>

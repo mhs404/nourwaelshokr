@@ -68,42 +68,59 @@ const lvls = {
   Hard: 2,
 };
 
-// Default Levels
+const checkedDifficultyElement = document.querySelector(
+  "[name='difficulty']:checked"
+);
 
-let defaultLevelName = "Normal";
-let defaultLevelSeconds = lvls[defaultLevelName];
+let defaultLevelSeconds;
 
-// Dealing with levels
-let easyMode = document.getElementById("easy");
-let normalMode = document.getElementById("normal");
-let hardMode = document.getElementById("hard");
+let lvlNameSpan = document.querySelector(".message .lvl");
+let secondsSpan = document.querySelector(".message .seconds");
+let timeLeftSpan = document.querySelector(".time span");
 
-// if (easyMode.checked) {
-//   defaultLevelName = "Easy";
-//   defaultLevelSeconds = lvls[defaultLevelName];
-// } else if (normalMode.checked) {
-//   defaultLevelName = "Normal";
-//   defaultLevelSeconds = lvls[defaultLevelName];
-// } else if (hardMode.checked) {
-//   defaultLevelName = "Hard";
-//   defaultLevelSeconds = lvls[defaultLevelName];
-// }
+updateLevel(checkedDifficultyElement);
 
-easyMode.addEventListener("change", (e) => {
-  if (e.target.checked) {
-    defaultLevelName = "Easy";
-    defaultLevelSeconds = lvls[defaultLevelName];
+document.getElementsByName("difficulty").forEach(updateLevelOnInputChange);
+
+function updateLevelOnInputChange(input) {
+  input.addEventListener("change", (event) => updateLevel(event.target));
+}
+
+function updateLevel(element) {
+  let defaultLevelName;
+
+  switch (element.value) {
+    case "easy":
+      defaultLevelName = "Easy";
+      defaultLevelSeconds = lvls[defaultLevelName];
+      break;
+    case "normal":
+      defaultLevelName = "Normal";
+      defaultLevelSeconds = lvls[defaultLevelName];
+      break;
+    default:
+      defaultLevelName = "Hard";
+      defaultLevelSeconds = lvls[defaultLevelName];
+      break;
   }
-});
+
+  RenderLevelNameAndSeconds(defaultLevelName);
+
+  function RenderLevelNameAndSeconds(defaultLevelName) {
+    lvlNameSpan.innerHTML = defaultLevelName;
+
+    secondsSpan.innerHTML = defaultLevelSeconds;
+
+    timeLeftSpan.innerHTML = defaultLevelSeconds;
+  }
+}
+
 // Catch Selectors
 
 let startButton = document.querySelector(".start");
-let lvlNameSpan = document.querySelector(".message .lvl");
-let secondsSpan = document.querySelector(".message .seconds");
 let theWord = document.querySelector(".the-word");
 let upcomingWords = document.querySelector(".upcoming-words");
 let input = document.querySelector(".input");
-let timeLeftSpan = document.querySelector(".time span");
 let scoreGot = document.querySelector(".score .got");
 let scoreTotal = document.querySelector(".score .total");
 let finishMessage = document.querySelector(".finish");
@@ -114,9 +131,6 @@ let currentDate =
 
 // Setting Level Name + Seconds + Score
 
-lvlNameSpan.innerHTML = defaultLevelName;
-secondsSpan.innerHTML = defaultLevelSeconds;
-timeLeftSpan.innerHTML = defaultLevelSeconds;
 scoreTotal.innerHTML = words.length;
 
 // Disable Paste Event
