@@ -26,56 +26,6 @@
   ---- [06] Add 3 Seconds For The First Word
 */
 
-class Level {
-  #name;
-
-  #seconds;
-
-  get seconds() {
-    return this.#seconds;
-  }
-
-  constructor() {
-    const checkedDifficultyElement = document.querySelector(
-      "[name='difficulty']:checked"
-    );
-
-    this.updateLevel(checkedDifficultyElement);
-
-    document.getElementsByName("difficulty").forEach((input)=>this.updateLevelOnInputChange(input));
-  }
-
-  updateLevelOnInputChange(input) {
-    input.addEventListener("change", (event) => this.updateLevel(event.target));
-  }
-
-  updateLevel(element) {
-    switch (element.value) {
-      case "easy":
-        this.#name = "Easy";
-        break;
-      case "normal":
-        this.#name = "Normal";
-        break;
-      default:
-        this.#name = "Hard";
-        break;
-    }
-
-    this.#seconds = lvls[this.#name];
-
-    RenderLevelNameAndSeconds(this.#name, this.#seconds);
-
-    function RenderLevelNameAndSeconds(name, seconds) {
-      lvlNameSpan.innerHTML = name;
-
-      secondsSpan.innerHTML = seconds;
-
-      timeLeftSpan.innerHTML = seconds;
-    }
-  }
-}
-
 // Array Of Words
 const words = [
   "Hello",
@@ -122,8 +72,61 @@ let lvlNameSpan = document.querySelector(".message .lvl");
 let secondsSpan = document.querySelector(".message .seconds");
 let timeLeftSpan = document.querySelector(".time span");
 
-const defaultLevel = new Level();
+let seconds;
 
+InitializeLevel();
+
+function InitializeLevel() {
+  getAndUpdateDefaultDifficulty();
+
+  function getAndUpdateDefaultDifficulty() {
+    const checkedDifficultyElement = document.querySelector(
+      "[name='difficulty']:checked"
+    );
+
+    updateLevel(checkedDifficultyElement);
+  }
+
+  ListenToDifficultyChanges();
+
+  function ListenToDifficultyChanges() {
+    document
+      .getElementsByName("difficulty")
+      .forEach((input) => updateLevelOnInputChange(input));
+  }
+
+  function updateLevelOnInputChange(input) {
+    input.addEventListener("change", (event) => updateLevel(event.target));
+  }
+}
+
+function updateLevel(element) {
+  let name;
+
+  switch (element.value) {
+    case "easy":
+      name = "Easy";
+      break;
+    case "normal":
+      name = "Normal";
+      break;
+    default:
+      name = "Hard";
+      break;
+  }
+
+  seconds = lvls[name];
+
+  RenderLevelNameAndSeconds(name, seconds);
+
+  function RenderLevelNameAndSeconds(name, seconds) {
+    lvlNameSpan.innerHTML = name;
+
+    secondsSpan.innerHTML = seconds;
+
+    timeLeftSpan.innerHTML = seconds;
+  }
+}
 // Catch Selectors
 
 let startButton = document.querySelector(".start");
@@ -195,7 +198,7 @@ if (localStorage.getItem("scoreGot")) {
 
 // Start Play Function
 function startPlay() {
-  timeLeftSpan.innerHTML = defaultLevel.seconds;
+  timeLeftSpan.innerHTML = seconds;
 
   let start = setInterval(() => {
     timeLeftSpan.innerHTML--;
