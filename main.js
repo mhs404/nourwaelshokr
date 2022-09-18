@@ -26,6 +26,56 @@
   ---- [06] Add 3 Seconds For The First Word
 */
 
+class Level {
+  #name;
+
+  #seconds;
+
+  get seconds() {
+    return this.#seconds;
+  }
+
+  constructor() {
+    const checkedDifficultyElement = document.querySelector(
+      "[name='difficulty']:checked"
+    );
+
+    this.updateLevel(checkedDifficultyElement);
+
+    document.getElementsByName("difficulty").forEach((input)=>this.updateLevelOnInputChange(input));
+  }
+
+  updateLevelOnInputChange(input) {
+    input.addEventListener("change", (event) => this.updateLevel(event.target));
+  }
+
+  updateLevel(element) {
+    switch (element.value) {
+      case "easy":
+        this.#name = "Easy";
+        break;
+      case "normal":
+        this.#name = "Normal";
+        break;
+      default:
+        this.#name = "Hard";
+        break;
+    }
+
+    this.#seconds = lvls[this.#name];
+
+    RenderLevelNameAndSeconds(this.#name, this.#seconds);
+
+    function RenderLevelNameAndSeconds(name, seconds) {
+      lvlNameSpan.innerHTML = name;
+
+      secondsSpan.innerHTML = seconds;
+
+      timeLeftSpan.innerHTML = seconds;
+    }
+  }
+}
+
 // Array Of Words
 const words = [
   "Hello",
@@ -68,52 +118,11 @@ const lvls = {
   Hard: 2,
 };
 
-const checkedDifficultyElement = document.querySelector(
-  "[name='difficulty']:checked"
-);
-
-let defaultLevelSeconds;
-
 let lvlNameSpan = document.querySelector(".message .lvl");
 let secondsSpan = document.querySelector(".message .seconds");
 let timeLeftSpan = document.querySelector(".time span");
 
-updateLevel(checkedDifficultyElement);
-
-document.getElementsByName("difficulty").forEach(updateLevelOnInputChange);
-
-function updateLevelOnInputChange(input) {
-  input.addEventListener("change", (event) => updateLevel(event.target));
-}
-
-function updateLevel(element) {
-  let defaultLevelName;
-
-  switch (element.value) {
-    case "easy":
-      defaultLevelName = "Easy";
-      defaultLevelSeconds = lvls[defaultLevelName];
-      break;
-    case "normal":
-      defaultLevelName = "Normal";
-      defaultLevelSeconds = lvls[defaultLevelName];
-      break;
-    default:
-      defaultLevelName = "Hard";
-      defaultLevelSeconds = lvls[defaultLevelName];
-      break;
-  }
-
-  RenderLevelNameAndSeconds(defaultLevelName);
-
-  function RenderLevelNameAndSeconds(defaultLevelName) {
-    lvlNameSpan.innerHTML = defaultLevelName;
-
-    secondsSpan.innerHTML = defaultLevelSeconds;
-
-    timeLeftSpan.innerHTML = defaultLevelSeconds;
-  }
-}
+const defaultLevel = new Level();
 
 // Catch Selectors
 
@@ -186,7 +195,7 @@ if (localStorage.getItem("scoreGot")) {
 
 // Start Play Function
 function startPlay() {
-  timeLeftSpan.innerHTML = defaultLevelSeconds;
+  timeLeftSpan.innerHTML = defaultLevel.seconds;
 
   let start = setInterval(() => {
     timeLeftSpan.innerHTML--;
